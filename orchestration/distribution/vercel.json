@@ -1,0 +1,42 @@
+{
+  "name": "rosoideae-platform",
+  "version": 2,
+  "builds": [
+    {
+      "src": "visual/**",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "visual/dist"
+      }
+    },
+    {
+      "src": "connectivity/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/connectivity/$1"
+    },
+    {
+      "src": "/ws",
+      "dest": "/connectivity/streaming/websocket-handler"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/visual/$1"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "@database-url",
+    "MASTER_SECRET": "@master-secret",
+    "TOKEN_LIFESPAN_HOURS": "48"
+  },
+  "regions": ["iad1"],
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }
+}
