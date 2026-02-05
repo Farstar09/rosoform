@@ -1,0 +1,66 @@
+version: '3.9'
+
+services:
+  rosoideae-database:
+    image: postgres:15-alpine
+    container_name: roso-storage
+    environment:
+      POSTGRES_DB: rosoideae_production
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - roso-data-volume:/var/lib/postgresql/data
+      - ../storage/blueprints:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - roso-internal-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rosoideae-backend:
+    build:
+      context: ../..
+      dockerfile: orchestration/virtualization/Dockerfile
+    container_name: roso-connectivity
+    environment:
+      DATABASE_URL: postgresql://${DB_USERNAME}:${DB_PASSWORD}@rosoideae-database:5432/rosoideae_production
+      MASTER_SECRET: ${CRYPTO_MASTER_SECRET}
+      TOKEN_LIFESPAN_HOURS: 48
+      PORT: 8080
+      WS_PORT: 8081
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - roso-internal-network
+    depends_on:
+      rosoideae-database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  rosoideae-frontend:
+    image: nginx:alpine
+    container_name: roso-visual
+    volumes:
+      - ./nginx-config.conf:/etc/nginx/nginx.conf:ro
+      - ../../visual:/usr/share/nginx/html:ro
+    ports:
+      - "3000:80"
+    networks:
+      - roso-internal-network
+    depends_on:
+      - rosoideae-backend
+    restart: unless-stopped
+
+volumes:
+  roso-data-volume:
+    driver: local
+
+networks:
+  roso-internal-network:
+    driver: bridge

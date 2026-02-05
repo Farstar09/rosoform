@@ -1,1 +1,266 @@
-# rosoform
+# ROSOIDEAE Advanced Forum Platform
+
+A sophisticated forum platform with dark purple/red/black aesthetic, featuring real-time discussions, nested threads, and comprehensive admin tools.
+
+## 🌹 Architecture Overview
+
+```
+rosoform/
+├── visual/                     # Frontend components
+│   ├── displays/              # UI rendering components
+│   ├── interactions/          # User interaction handlers
+│   └── aesthetics/            # Theme and styling
+├── logic/                      # Business logic
+│   ├── orchestration/         # Thread and discussion management
+│   ├── calculations/          # Analytics and metrics
+│   └── transformations/       # Data processing
+├── connectivity/              # Backend services
+│   ├── endpoints/             # API routes
+│   ├── validation/            # Authentication and authorization
+│   └── streaming/             # WebSocket real-time communication
+├── storage/                    # Database layer
+│   ├── blueprints/            # Schema definitions
+│   └── transitions/           # Migrations
+└── orchestration/             # Deployment
+    ├── virtualization/        # Docker containers
+    └── distribution/          # Cloud deployment configs
+```
+
+## 🎨 Color Palette
+
+The platform uses a custom color system:
+
+- **Deep Night**: `#1A0B1F` - Primary background
+- **Roso Purple**: `#5D2E6B` - Brand color
+- **Crimson Edge**: `#9C1B1B` - Accent color
+- **Blood Moon**: `#6B0F0F` - Secondary accent
+
+Dynamic gradient computation provides animated color transitions throughout the interface.
+
+## ✨ Key Features
+
+### 1. Public Forum
+- **Categorized Discussions**: Organized thread taxonomy
+- **Nested Replies**: Unlimited depth conversation trees
+- **Resonance Scoring**: Custom algorithm ranks content quality
+- **Real-time Updates**: WebSocket-based live message streaming
+- **Markdown Support**: Rich text formatting
+
+### 2. Admin/Manager Tools
+- **Identity Vault**: Cryptographic authentication system
+- **Privilege Hierarchy**: Role-based access control
+- **Direct Editing**: In-place content moderation
+- **Analytics Dashboard**: Pulse tracking and metrics
+- **Session Management**: Secure token handling
+
+### 3. User Profiles
+- **Identity Registry**: Comprehensive user system
+- **Visual Customization**: Avatar and biography support
+- **Activity Tracking**: Engagement metrics
+- **Privilege Management**: Dynamic role assignment
+
+## 🔧 Technical Components
+
+### Frontend (`visual/`)
+
+**ConversationRenderer** (`visual/displays/conversation-renderer.tsx`)
+- Animated gradient backgrounds
+- Dynamic color computation based on resonance
+- Nested thread visualization
+- Real-time WebSocket integration
+
+**ColorComputer** (`visual/aesthetics/color-computer.ts`)
+- Custom gradient interpolation
+- Dynamic shadow generation
+- RGB computation algorithms
+
+### Backend (`connectivity/`)
+
+**IdentityVault** (`connectivity/validation/identity-vault.ts`)
+- PBKDF2 password scrambling (15,000 iterations)
+- HMAC-SHA256 token signing
+- Timing-safe comparison
+- Privilege grant/revoke system
+
+**StreamingNexus** (`connectivity/streaming/streaming-nexus.ts`)
+- Channel-based message routing
+- Connection lifecycle management
+- Stale connection detection
+- Message buffering with capacity limits
+- Channel metrics computation
+
+### Business Logic (`logic/`)
+
+**DiscussionOrchestrator** (`logic/orchestration/discussion-orchestrator.ts`)
+- Conversation graph management
+- Resonance calculation algorithm
+- Thought path tracing
+- Discussion velocity metrics
+- Live resonance streaming
+
+### Database (`storage/`)
+
+**Persistence Blueprint** (`storage/blueprints/persistence-blueprint.sql`)
+- Custom PostgreSQL schema
+- Trigger-based resonance computation
+- Automatic thread pulse updates
+- Analytical indices
+- JSONB metadata support
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+ or Python 3.8+
+- PostgreSQL 13+
+- Modern browser with WebSocket support
+
+### Initialize Platform
+
+```bash
+# Python-based scaffolding
+python3 scaffold-generator.py
+
+# This creates the complete directory structure
+```
+
+### Database Setup
+
+```bash
+# Connect to PostgreSQL
+psql -U postgres -d rosoideae
+
+# Execute schema
+\i storage/blueprints/persistence-blueprint.sql
+```
+
+### Configuration
+
+Create environment files with the following variables:
+
+**Frontend** (`.env.visual`):
+```
+REACT_APP_WS_ENDPOINT=wss://your-domain/stream
+REACT_APP_API_ENDPOINT=https://your-domain/api
+```
+
+**Backend** (`.env.connectivity`):
+```
+MASTER_SECRET=your-cryptographic-secret-here
+TOKEN_LIFESPAN_HOURS=48
+DATABASE_URL=postgresql://user:pass@localhost:5432/rosoideae
+```
+
+## 📊 Custom Algorithms
+
+### Resonance Scoring
+Content quality is computed using:
+```
+resonance = (word_density × 0.4) + (unique_chars × 0.3) + (sentence_count × 10)
+```
+
+### Dynamic Color Computation
+RGB values are generated using phase-shifted sine waves:
+```
+r = 26 + (138 × sin(phase))
+g = 11 + (15 × cos(phase × 0.5))
+b = 31 + (76 × sin(phase × 1.3))
+```
+
+### Discussion Velocity
+Activity rate over time window:
+```
+velocity = recent_thoughts_count / hours_back
+```
+
+## 🔐 Security Features
+
+- **Password Scrambling**: PBKDF2 with 15,000 iterations
+- **Token Signing**: HMAC-SHA256 cryptographic signatures
+- **Timing-Safe Comparison**: Prevents timing attacks
+- **Session Expiration**: Configurable token lifespan
+- **Privilege Isolation**: Role-based access control
+- **Input Validation**: Length constraints and sanitization
+
+## 🎯 API Endpoints
+
+### Public Routes
+- `GET /threads/category/:categoryName` - List threads by category
+- `GET /threads/:threadId/posts` - Fetch thread messages
+
+### Authenticated Routes
+- `POST /threads/create` - Create new discussion
+- `POST /posts/create` - Add thought to thread
+
+### Manager Routes
+- `PATCH /posts/:postId/edit` - Modify existing content
+- `DELETE /posts/:postId` - Remove content
+
+## 🌐 WebSocket Protocol
+
+### Client → Server
+```json
+{
+  "action": "SUBSCRIBE_THREAD",
+  "threadId": "thread_key",
+  "vaultId": "user_vault_id"
+}
+```
+
+### Server → Client
+```json
+{
+  "messageType": "NEW_POST",
+  "threadId": "thread_key",
+  "payload": { ... },
+  "timestampUtc": 1234567890
+}
+```
+
+## 📈 Analytics & Metrics
+
+The platform tracks:
+- **Thread Pulse**: Last activity timestamp
+- **Resonance Metrics**: Content quality scores
+- **Discussion Velocity**: Messages per hour
+- **Channel Metrics**: Subscriber counts, message rates
+- **Vault Statistics**: Identity and privilege distribution
+
+## 🎨 Theme Customization
+
+Modify `visual/aesthetics/color-computer.ts` to adjust:
+- Color spectrum map
+- Gradient computation algorithms
+- Shadow elevation calculations
+- Animation parameters
+
+## 🧩 Extensibility
+
+The modular architecture allows easy extension:
+
+1. **Add new privileges**: Extend `IdentityVault.grantPrivilege()`
+2. **Custom message types**: Add to `StreamingNexus.broadcastToChannel()`
+3. **New metrics**: Extend `compute_thought_resonance()` SQL function
+4. **UI components**: Create new displays in `visual/displays/`
+
+## 📝 Development Notes
+
+- All timestamps use Unix epoch milliseconds
+- IDs follow pattern: `roso_{type}_{timestamp}_{random}`
+- WebSocket reconnection logic should be implemented client-side
+- Database migrations should preserve resonance scores
+
+## 🚢 Deployment
+
+Deployment configurations for containerization and cloud platforms are in the `orchestration/` directory.
+
+## 📄 License
+
+Proprietary - ROSOIDEAE Platform
+
+## 🤝 Contributing
+
+This is a scaffolded project. Customize to your specific requirements.
+
+---
+
+Built with 🌹 for ROSOIDEAE
