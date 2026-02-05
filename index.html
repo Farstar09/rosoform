@@ -265,6 +265,7 @@
 
     // ── Categories ──
     const CATEGORIES = ['General', 'Introductions', 'Ideas', 'Feedback', 'Off-Topic'];
+    const MAX_REPLY_DEPTH = 5;
 
     // ── Helpers ──
     function generateId() {
@@ -300,7 +301,7 @@
     // ── Storage ──
     function loadThreads() {
       try { return JSON.parse(localStorage.getItem('roso_threads') || '[]'); }
-      catch (_) { return []; }
+      catch (err) { console.warn('Failed to load threads:', err); return []; }
     }
     function saveThreads(threads) {
       localStorage.setItem('roso_threads', JSON.stringify(threads));
@@ -377,10 +378,10 @@
     function renderCategories() {
       var threads = loadThreads();
       var list = document.getElementById('category-list');
-      var html = '<li class="cat-item' + (currentCategory === null ? ' active' : '') + '" onclick="selectCategory(null)">All <span class="cat-count">' + threads.length + '</span></li>';
+      var html = '<li class="cat-item' + (currentCategory === null ? ' active' : '') + '" data-category="">All <span class="cat-count">' + threads.length + '</span></li>';
       CATEGORIES.forEach(function(cat) {
         var count = threads.filter(function(t) { return t.category === cat; }).length;
-        html += '<li class="cat-item' + (currentCategory === cat ? ' active' : '') + '" onclick="selectCategory(\'' + escapeHtml(cat) + '\')">' + escapeHtml(cat) + ' <span class="cat-count">' + count + '</span></li>';
+        html += '<li class="cat-item' + (currentCategory === cat ? ' active' : '') + '" data-category="' + escapeHtml(cat) + '">' + escapeHtml(cat) + ' <span class="cat-count">' + count + '</span></li>';
       });
       list.innerHTML = html;
     }
@@ -428,7 +429,7 @@
       var html = '';
       filtered.forEach(function(t) {
         var replyCount = countAllReplies(t.replies || []);
-        html += '<div class="thread-card" onclick="navigateTo(\'thread\', \'' + t.id + '\')">'
+        html += '<div class="thread-card" data-thread-id="' + escapeHtml(t.id) + '">'
           + '<div class="thread-title">' + escapeHtml(t.title) + '</div>'
           + '<div class="thread-meta">'
             + '<span>by <strong>' + escapeHtml(t.author) + '</strong></span>'
@@ -496,12 +497,12 @@
           + '<div class="reply-meta">'
             + '<span>' + timeAgo(r.createdAt) + '</span>'
             + '<span class="resonance-badge">⚡ ' + (r.resonance || 0) + '</span>'
-            + (depth < 5 ? '<button class="reply-btn-small" onclick="toggleInlineReply(\'' + r.id + '\', event)">Reply</button>' : '')
+            + (depth < MAX_REPLY_DEPTH ? '<button class="reply-btn-small" data-toggle-reply="' + escapeHtml(r.id) + '">Reply</button>' : '')
           + '</div>'
-          + '<div id="inline-reply-' + r.id + '" class="hidden" style="margin-top:0.5rem;">'
-            + '<input class="form-input" id="ir-author-' + r.id + '" placeholder="Your name" maxlength="60" style="margin-bottom:0.4rem;" />'
-            + '<textarea class="form-textarea" id="ir-body-' + r.id + '" placeholder="Write a reply…" maxlength="5000" style="min-height:60px;margin-bottom:0.4rem;"></textarea>'
-            + '<button class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.8rem;" onclick="handleNestedReply(\'' + r.id + '\')">Reply</button>'
+          + '<div id="inline-reply-' + escapeHtml(r.id) + '" class="hidden" style="margin-top:0.5rem;">'
+            + '<input class="form-input" id="ir-author-' + escapeHtml(r.id) + '" placeholder="Your name" maxlength="60" style="margin-bottom:0.4rem;" />'
+            + '<textarea class="form-textarea" id="ir-body-' + escapeHtml(r.id) + '" placeholder="Write a reply…" maxlength="5000" style="min-height:60px;margin-bottom:0.4rem;"></textarea>'
+            + '<button class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.8rem;" data-nested-reply="' + escapeHtml(r.id) + '">Reply</button>'
           + '</div>';
         if (r.replies && r.replies.length > 0) {
           html += '<div class="reply-children">' + renderReplies(r.replies, depth + 1) + '</div>';
@@ -511,8 +512,7 @@
       return html;
     }
 
-    function toggleInlineReply(replyId, event) {
-      event.stopPropagation();
+    function toggleInlineReply(replyId) {
       var el = document.getElementById('inline-reply-' + replyId);
       if (el) el.classList.toggle('hidden');
     }
@@ -586,6 +586,41 @@
       saveThreads(threads);
       renderThreadView();
     }
+
+    // ── Event Delegation ──
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+
+      // Category click
+      var catItem = target.closest('[data-category]');
+      if (catItem) {
+        var cat = catItem.getAttribute('data-category');
+        selectCategory(cat === '' ? null : cat);
+        return;
+      }
+
+      // Thread card click
+      var threadCard = target.closest('[data-thread-id]');
+      if (threadCard) {
+        navigateTo('thread', threadCard.getAttribute('data-thread-id'));
+        return;
+      }
+
+      // Toggle inline reply form
+      var toggleBtn = target.closest('[data-toggle-reply]');
+      if (toggleBtn) {
+        e.stopPropagation();
+        toggleInlineReply(toggleBtn.getAttribute('data-toggle-reply'));
+        return;
+      }
+
+      // Nested reply submit
+      var nestedBtn = target.closest('[data-nested-reply]');
+      if (nestedBtn) {
+        handleNestedReply(nestedBtn.getAttribute('data-nested-reply'));
+        return;
+      }
+    });
 
     // ── Init ──
     seedIfEmpty();
