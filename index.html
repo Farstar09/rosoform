@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROSOIDEAE — Advanced Forum Platform</title>
+  <meta name="description" content="A sophisticated forum platform with real-time discussions, nested threads, and comprehensive admin tools." />
+  <style>
+    :root {
+      --deep-night: #1A0B1F;
+      --roso-purple: #5D2E6B;
+      --crimson-edge: #9C1B1B;
+      --blood-moon: #6B0F0F;
+      --text-primary: #E8D5F0;
+      --text-muted: #A889B8;
+      --surface: #2A1433;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--deep-night);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 5rem 1.5rem 3rem;
+      background: linear-gradient(170deg, var(--deep-night) 0%, var(--roso-purple) 55%, var(--crimson-edge) 100%);
+      border-bottom: 2px solid var(--blood-moon);
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(90deg, var(--text-primary), #C77DFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-section p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.3rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--text-muted);
+      color: var(--text-muted);
+    }
+
+    .content-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--roso-purple);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--roso-purple);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .card:hover {
+      border-color: var(--crimson-edge);
+      transform: translateY(-3px);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #C77DFF;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .directory-layout {
+      background: var(--surface);
+      border: 1px solid var(--roso-purple);
+      border-radius: 10px;
+      padding: 1.5rem 2rem;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.9;
+      overflow-x: auto;
+      margin-bottom: 3rem;
+      white-space: pre;
+      color: var(--text-muted);
+    }
+
+    .directory-layout strong {
+      color: #C77DFF;
+    }
+
+    .palette-strip {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .swatch {
+      flex: 1 1 120px;
+      padding: 1.25rem;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .swatch-label {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .links-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .links-row a {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid var(--roso-purple);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .links-row a:hover {
+      background: var(--roso-purple);
+      border-color: var(--crimson-edge);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--roso-purple);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hero-section">
+    <h1>🌹 ROSOIDEAE</h1>
+    <p>A sophisticated forum platform with dark purple/red/black aesthetic, featuring real-time discussions, nested threads, and comprehensive admin tools.</p>
+    <div class="badge-row">
+      <span class="badge">React</span>
+      <span class="badge">Node.js</span>
+      <span class="badge">PostgreSQL</span>
+      <span class="badge">WebSocket</span>
+      <span class="badge">Docker</span>
+    </div>
+  </header>
+
+  <main class="content-wrap">
+
+    <h2 class="section-title">✨ Key Features</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Public Forum</h3>
+        <p>Categorized discussions with nested replies, resonance scoring, real-time WebSocket updates, and Markdown support.</p>
+      </div>
+      <div class="card">
+        <h3>Admin &amp; Manager Tools</h3>
+        <p>Cryptographic identity vault, privilege hierarchy, direct content editing, analytics dashboard, and session management.</p>
+      </div>
+      <div class="card">
+        <h3>User Profiles</h3>
+        <p>Comprehensive identity registry, avatar customization, activity tracking, and dynamic role assignment.</p>
+      </div>
+      <div class="card">
+        <h3>Harmonic Resonance</h3>
+        <p>Match related discussions using wave-physics-inspired waveform signatures and interference pattern calculation.</p>
+      </div>
+      <div class="card">
+        <h3>Thought Weaver</h3>
+        <p>Discover semantic connections through trigram frequency analysis, vowel-consonant rhythm patterns, and density metrics.</p>
+      </div>
+      <div class="card">
+        <h3>Pulse Visualizer</h3>
+        <p>Canvas-based particle system with gravity attraction, dynamic HSL color shifts, heat maps, and 60fps rendering.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">📂 Project Layout</h2>
+    <div class="directory-layout"><strong>visual/</strong>          Frontend — React components, theme, interactions
+<strong>logic/</strong>           Business logic — orchestration, calculations, transformations
+<strong>connectivity/</strong>    Backend — Express endpoints, auth, WebSocket streaming
+<strong>storage/</strong>         Database — PostgreSQL schemas, migrations, analytics
+<strong>orchestration/</strong>   Deployment — Docker, Vercel configs</div>
+
+    <h2 class="section-title">🎨 Color Palette</h2>
+    <div class="palette-strip">
+      <div class="swatch" style="background:#1A0B1F;color:#E8D5F0;">Deep Night<span class="swatch-label">#1A0B1F</span></div>
+      <div class="swatch" style="background:#5D2E6B;color:#E8D5F0;">Roso Purple<span class="swatch-label">#5D2E6B</span></div>
+      <div class="swatch" style="background:#9C1B1B;color:#E8D5F0;">Crimson Edge<span class="swatch-label">#9C1B1B</span></div>
+      <div class="swatch" style="background:#6B0F0F;color:#E8D5F0;">Blood Moon<span class="swatch-label">#6B0F0F</span></div>
+    </div>
+
+    <h2 class="section-title">🔐 Security</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>PBKDF2 Password Scrambling</h3>
+        <p>15,000 iterations with SHA-512 for secure credential storage.</p>
+      </div>
+      <div class="card">
+        <h3>HMAC-SHA256 Tokens</h3>
+        <p>Cryptographic token signing with configurable lifespan and timing-safe comparison.</p>
+      </div>
+      <div class="card">
+        <h3>Role-Based Access</h3>
+        <p>Privilege hierarchy with administrator overrides and session revocation.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">📊 Custom Algorithms</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Resonance Scoring</h3>
+        <p>resonance = (word_density × 0.4) + (unique_chars × 0.3) + (sentence_count × 10)</p>
+      </div>
+      <div class="card">
+        <h3>Dynamic Color Computation</h3>
+        <p>Phase-shifted sine waves generate RGB values for animated gradients.</p>
+      </div>
+      <div class="card">
+        <h3>Temporal Flow Analysis</h3>
+        <p>Time-series decomposition with trend, seasonal, and residual components plus momentum indicators.</p>
+      </div>
+    </div>
+
+    <div class="links-row">
+      <a href="https://github.com/Farstar09/rosoform">📦 Repository</a>
+      <a href="https://github.com/Farstar09/rosoform/blob/main/ARCHITECTURE.md">📐 Architecture</a>
+      <a href="https://github.com/Farstar09/rosoform/blob/main/QUICKSTART.md">🚀 Quick Start</a>
+    </div>
+
+  </main>
+
+  <footer>
+    Built with 🌹 for ROSOIDEAE
+  </footer>
+
+</body>
+</html>
