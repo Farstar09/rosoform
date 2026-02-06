@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Built by Star</title>
+  <style>
+    :root {
+      --deep-night: #0a0a0f;
+      --text-primary: #E2E2E8;
+      --text-muted: #8B8B9A;
+      --surface: #14141a;
+      --border: #2a2a3a;
+      --purple-glow: #A855F7;
+      --purple-deep: #7C3AED;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--deep-night);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 30px rgba(168, 85, 247, 0.3), 0 0 60px rgba(168, 85, 247, 0.15); }
+      50% { text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 50px rgba(168, 85, 247, 0.5), 0 0 80px rgba(168, 85, 247, 0.25); }
+    }
+    @keyframes starFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    .star-container {
+      text-align: center;
+      padding: 3rem;
+      max-width: 600px;
+    }
+    .star-icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      animation: starFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+    }
+    .star-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--purple-glow);
+      animation: glowPulse 3s ease-in-out infinite;
+      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+    }
+    .star-description {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+    .star-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, var(--purple-deep), var(--purple-glow));
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
+    }
+    .star-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 2rem;
+      color: var(--purple-glow);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="star-container">
+    <div class="star-icon">⭐</div>
+    <h1 class="star-title">Built by Star</h1>
+    <p class="star-description">
+      This platform was designed and developed by Star — crafting tools and experiences for the Rosoideae community.
+    </p>
+    <a href="https://builtbystar.com" target="_blank" rel="noopener noreferrer" class="star-link">
+      Visit builtbystar.com →
+    </a>
+    <br />
+    <a href="index.html" class="back-link">← Back to Staff Portal</a>
+  </div>
+</body>
+</html>
