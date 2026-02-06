@@ -1,6 +1,6 @@
-# ROSOIDEAE Advanced Forum Platform
+# ROSOIDEAE Internal Staff Hub
 
-A sophisticated forum platform with dark purple/red/black aesthetic, featuring real-time discussions, nested threads, and comprehensive admin tools.
+An internal staff platform with a dark modern aesthetic, used for hosting staff applications, manager checkups, polls, and team discussions.
 
 ## 🌹 Architecture Overview
 
@@ -28,23 +28,23 @@ rosoform/
 
 ## 🎨 Color Palette
 
-The platform uses a custom color system:
+The platform uses a dark modern color system:
 
-- **Deep Night**: `#1A0B1F` - Primary background
-- **Roso Purple**: `#5D2E6B` - Brand color
-- **Crimson Edge**: `#9C1B1B` - Accent color
-- **Blood Moon**: `#6B0F0F` - Secondary accent
+- **Deep Night**: `#0D0D0D` - Primary background
+- **Surface Gray**: `#3A3A4A` - Brand color
+- **Violet Accent**: `#7C3AED` - Accent color
+- **Deep Violet**: `#5B21B6` - Secondary accent
 
 Dynamic gradient computation provides animated color transitions throughout the interface.
 
 ## ✨ Key Features
 
-### 1. Public Forum
-- **Categorized Discussions**: Organized thread taxonomy
-- **Nested Replies**: Unlimited depth conversation trees
-- **Resonance Scoring**: Custom algorithm ranks content quality
-- **Real-time Updates**: WebSocket-based live message streaming
-- **Markdown Support**: Rich text formatting
+### 1. Staff Hub
+- **Staff Applications**: Submit and review staff applications
+- **Manager Checkups**: Weekly status updates and team check-ins
+- **Polls**: Internal surveys and preference gathering
+- **Announcements**: Company-wide staff communications
+- **Internal Discussion**: Team conversations and coordination
 
 ### 2. Admin/Manager Tools
 - **Identity Vault**: Cryptographic authentication system
