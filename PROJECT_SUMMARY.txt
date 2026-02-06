@@ -2,7 +2,7 @@
                     ROSOIDEAE PLATFORM - PROJECT SUMMARY
 ═══════════════════════════════════════════════════════════════════════════════
 
-PROJECT: Advanced Forum Platform Scaffold
+PROJECT: Internal Staff Hub Platform
 REPOSITORY: Farstar09/rosoform
 BRANCH: copilot/scaffold-advanced-website
 DATE: February 5, 2026
@@ -17,7 +17,7 @@ DELIVERABLES SUMMARY
    • UserProfile - Editable profiles with statistics
    • PulseVisualizer - Particle-based activity visualization
    • ColorComputer - Dynamic gradient generation system
-   • Theme: Dark purple (#5D2E6B), Red (#9C1B1B), Black (#1A0B1F)
+   • Theme: Dark modern — Charcoal (#0D0D0D), Violet (#7C3AED), Deep Violet (#5B21B6)
 
 ✅ BACKEND (Node.js/Express)
    • IdentityVault - PBKDF2 authentication (15K iterations, HMAC-SHA256)

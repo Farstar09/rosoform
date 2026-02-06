@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ROSOIDEAE — Forum</title>
-  <meta name="description" content="ROSOIDEAE forum platform with discussions, nested threads, and admin tools." />
+  <title>ROSOIDEAE — Staff Hub</title>
+  <meta name="description" content="ROSOIDEAE internal staff hub for applications, manager checkups, polls, and team discussions." />
   <style>
     :root {
-      --deep-night: #1A0B1F;
-      --roso-purple: #5D2E6B;
-      --crimson-edge: #9C1B1B;
-      --blood-moon: #6B0F0F;
-      --text-primary: #E8D5F0;
-      --text-muted: #A889B8;
-      --surface: #2A1433;
-      --surface-hover: #361A42;
-      --success: #28A745;
-      --input-bg: #0F0716;
+      --deep-night: #0D0D0D;
+      --roso-purple: #3A3A4A;
+      --crimson-edge: #7C3AED;
+      --blood-moon: #5B21B6;
+      --text-primary: #E2E2E8;
+      --text-muted: #8B8B9A;
+      --surface: #18181B;
+      --surface-hover: #222228;
+      --success: #22C55E;
+      --input-bg: #111114;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -32,8 +32,8 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.75rem 1.5rem;
-      background: linear-gradient(90deg, var(--deep-night), var(--roso-purple));
-      border-bottom: 2px solid var(--blood-moon);
+      background: linear-gradient(90deg, var(--deep-night), #1a1a2e);
+      border-bottom: 1px solid var(--roso-purple);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -43,7 +43,7 @@
       font-weight: 800;
       letter-spacing: 0.1em;
       cursor: pointer;
-      background: linear-gradient(90deg, var(--text-primary), #C77DFF);
+      background: linear-gradient(90deg, var(--text-primary), #A78BFA);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -98,7 +98,7 @@
       transition: border-color 0.2s, transform 0.15s;
     }
     .thread-card:hover { border-color: var(--crimson-edge); transform: translateY(-2px); }
-    .thread-card .thread-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: #C77DFF; }
+    .thread-card .thread-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: #A78BFA; }
     .thread-card .thread-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 1rem; flex-wrap: wrap; }
     .thread-card .thread-preview { font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
@@ -108,7 +108,7 @@
     .thread-view-header h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
     .thread-view-header .meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
     .thread-body { background: var(--surface); border: 1px solid var(--roso-purple); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; line-height: 1.7; white-space: pre-wrap; }
-    .back-btn { background: none; border: none; color: #C77DFF; cursor: pointer; font-size: 0.9rem; margin-bottom: 1rem; padding: 0; }
+    .back-btn { background: none; border: none; color: #A78BFA; cursor: pointer; font-size: 0.9rem; margin-bottom: 1rem; padding: 0; }
     .back-btn:hover { text-decoration: underline; }
     /* ── Replies ── */
     .replies-section h3 { font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--roso-purple); padding-bottom: 0.4rem; }
@@ -119,10 +119,10 @@
       padding: 0.85rem 1rem;
       margin-bottom: 0.6rem;
     }
-    .reply-node .reply-author { color: var(--crimson-edge); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
+    .reply-node .reply-author { color: #A78BFA; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
     .reply-node .reply-text { font-size: 0.92rem; line-height: 1.6; white-space: pre-wrap; }
     .reply-node .reply-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; display: flex; gap: 1rem; align-items: center; }
-    .reply-btn-small { background: none; border: none; color: #C77DFF; cursor: pointer; font-size: 0.75rem; }
+    .reply-btn-small { background: none; border: none; color: #A78BFA; cursor: pointer; font-size: 0.75rem; }
     .reply-btn-small:hover { text-decoration: underline; }
     .reply-children { margin-left: 1.25rem; margin-top: 0.5rem; }
     .resonance-badge { font-family: monospace; font-size: 0.7rem; color: var(--crimson-edge); }
@@ -175,10 +175,10 @@
 
   <!-- ── Header ── -->
   <header class="site-header">
-    <span class="logo" onclick="navigateTo('home')">🌹 ROSOIDEAE</span>
+    <span class="logo" onclick="navigateTo('home')">🌹 ROSOIDEAE Staff Hub</span>
     <div class="nav-links">
-      <button class="nav-btn active" id="nav-home" onclick="navigateTo('home')">Forum</button>
-      <button class="nav-btn primary" id="nav-new" onclick="navigateTo('new-thread')">+ New Thread</button>
+      <button class="nav-btn active" id="nav-home" onclick="navigateTo('home')">Dashboard</button>
+      <button class="nav-btn primary" id="nav-new" onclick="navigateTo('new-thread')">+ New Post</button>
     </div>
   </header>
 
@@ -193,7 +193,7 @@
         </aside>
         <section class="thread-panel">
           <div class="thread-list-header">
-            <h2 id="thread-list-title">All Discussions</h2>
+            <h2 id="thread-list-title">All Posts</h2>
           </div>
           <div id="thread-list"></div>
         </section>
@@ -202,7 +202,7 @@
 
     <!-- ════ NEW THREAD ════ -->
     <div id="view-new-thread" class="hidden">
-      <h2 style="margin-bottom:1rem;">Create a New Thread</h2>
+      <h2 style="margin-bottom:1rem;">Create a New Post</h2>
       <form id="new-thread-form" onsubmit="handleCreateThread(event)">
         <div class="form-group">
           <label for="nt-author">Your Name</label>
@@ -214,14 +214,14 @@
         </div>
         <div class="form-group">
           <label for="nt-title">Title</label>
-          <input class="form-input" id="nt-title" required placeholder="Thread title" maxlength="200" />
+          <input class="form-input" id="nt-title" required placeholder="Post title" maxlength="200" />
         </div>
         <div class="form-group">
           <label for="nt-body">Body</label>
-          <textarea class="form-textarea" id="nt-body" required placeholder="Write your opening post…" maxlength="5000"></textarea>
+          <textarea class="form-textarea" id="nt-body" required placeholder="Write your post…" maxlength="5000"></textarea>
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Post Thread</button>
+          <button type="submit" class="btn btn-primary">Submit Post</button>
           <button type="button" class="btn btn-secondary" onclick="navigateTo('home')">Cancel</button>
         </div>
       </form>
@@ -229,7 +229,7 @@
 
     <!-- ════ THREAD VIEW ════ -->
     <div id="view-thread" class="hidden">
-      <button class="back-btn" onclick="navigateTo('home')">← Back to discussions</button>
+      <button class="back-btn" onclick="navigateTo('home')">← Back to dashboard</button>
       <div class="thread-view-header">
         <h2 id="tv-title"></h2>
         <div class="meta" id="tv-meta"></div>
@@ -256,7 +256,7 @@
 
   </div>
 
-  <footer>Built with 🌹 for ROSOIDEAE</footer>
+  <footer>Internal Staff Hub · Built with 🌹 for ROSOIDEAE</footer>
 
   <script>
     /* ══════════════════════════════════════════
@@ -264,7 +264,7 @@
        ══════════════════════════════════════════ */
 
     // ── Categories ──
-    const CATEGORIES = ['General', 'Introductions', 'Ideas', 'Feedback', 'Off-Topic'];
+    const CATEGORIES = ['Staff Applications', 'Manager Checkups', 'Polls', 'Announcements', 'Internal Discussion'];
     const MAX_REPLY_DEPTH = 5;
 
     // ── Helpers ──
@@ -314,28 +314,28 @@
       var now = Date.now();
       var seed = [
         {
-          id: generateId(), category: 'General', title: 'Welcome to ROSOIDEAE!',
-          body: 'Welcome to the ROSOIDEAE forum. This is a space for open discussion, ideas, and community building.\n\nFeel free to create threads, reply to others, and explore the nested conversation system.',
+          id: generateId(), category: 'Announcements', title: 'Welcome to the ROSOIDEAE Staff Hub',
+          body: 'Welcome to the ROSOIDEAE Staff Hub. This is our internal platform for staff applications, manager checkups, polls, and team discussions.\n\nPlease use the appropriate category when creating posts. This is not a public forum — access is restricted to staff only.',
           author: 'Admin', createdAt: now - 86400000,
           replies: [
-            { id: generateId(), author: 'Rosalind', text: 'Great to be here! Looking forward to some deep discussions.', createdAt: now - 72000000, parentId: null, resonance: 13.2, replies: [
-              { id: generateId(), author: 'Admin', text: 'Welcome aboard! Feel free to start any thread you like.', createdAt: now - 68000000, parentId: null, resonance: 11.8, replies: [] }
+            { id: generateId(), author: 'HR Manager', text: 'Reminder: All new staff applications should be posted under the Staff Applications category.', createdAt: now - 72000000, parentId: null, resonance: 13.2, replies: [
+              { id: generateId(), author: 'Admin', text: 'Thanks for the heads up! I\'ve pinned the application guidelines.', createdAt: now - 68000000, parentId: null, resonance: 11.8, replies: [] }
             ]},
-            { id: generateId(), author: 'Marcus', text: 'The aesthetic of this platform is stunning. Love the color scheme.', createdAt: now - 60000000, parentId: null, resonance: 14.5, replies: [] }
+            { id: generateId(), author: 'Team Lead', text: 'Great to have a centralized hub for all internal operations.', createdAt: now - 60000000, parentId: null, resonance: 14.5, replies: [] }
           ]
         },
         {
-          id: generateId(), category: 'Ideas', title: 'Feature Request: Markdown Support',
-          body: 'It would be great to have full markdown support in posts. Bold, italics, code blocks, lists — the works.\n\nWhat does everyone think?',
-          author: 'DevUser', createdAt: now - 43200000,
+          id: generateId(), category: 'Polls', title: 'Q1 Schedule Preference Survey',
+          body: 'We\'re looking to finalize the Q1 team schedules. Please share your preferred working hours and any scheduling constraints.\n\nOptions:\n• Morning shift (7am - 3pm)\n• Standard shift (9am - 5pm)\n• Flexible hours\n\nPlease reply with your preference and any notes.',
+          author: 'Operations Lead', createdAt: now - 43200000,
           replies: [
-            { id: generateId(), author: 'Rosalind', text: 'Absolutely, markdown would be a huge improvement for code-related discussions.', createdAt: now - 40000000, parentId: null, resonance: 12.1, replies: [] }
+            { id: generateId(), author: 'Team Lead', text: 'Standard shift works best for my team. We need overlap with the support crew.', createdAt: now - 40000000, parentId: null, resonance: 12.1, replies: [] }
           ]
         },
         {
-          id: generateId(), category: 'Introductions', title: 'Hi, I\'m new here!',
-          body: 'Just joined the community. I\'m interested in web development and design. Looking forward to connecting with everyone!',
-          author: 'NewMember', createdAt: now - 21600000,
+          id: generateId(), category: 'Manager Checkups', title: 'Weekly Team Status — Feb 3rd',
+          body: 'Managers, please post your weekly team status updates here. Include:\n• Key accomplishments\n• Blockers or concerns\n• Goals for the upcoming week',
+          author: 'Director', createdAt: now - 21600000,
           replies: []
         }
       ];
@@ -414,7 +414,7 @@
 
     function renderThreadList() {
       var threads = loadThreads();
-      var title = currentCategory ? currentCategory : 'All Discussions';
+      var title = currentCategory ? currentCategory : 'All Posts';
       document.getElementById('thread-list-title').textContent = title;
 
       var filtered = currentCategory ? threads.filter(function(t) { return t.category === currentCategory; }) : threads;
@@ -422,7 +422,7 @@
 
       var container = document.getElementById('thread-list');
       if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>No threads yet in this category.</p><button class="btn btn-primary" onclick="navigateTo(\'new-thread\')">Start the first discussion</button></div>';
+        container.innerHTML = '<div class="empty-state"><p>No posts yet in this category.</p><button class="btn btn-primary" onclick="navigateTo(\'new-thread\')">Create the first post</button></div>';
         return;
       }
 
