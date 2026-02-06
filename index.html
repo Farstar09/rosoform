@@ -255,6 +255,43 @@
       .dash-hero h1 { font-size: 1.35rem; }
     }
     footer { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    .built-by-star {
+      color: #A855F7; text-decoration: none; font-weight: 600;
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 25px rgba(168, 85, 247, 0.25);
+      animation: starGlow 3s ease-in-out infinite; transition: all 0.3s;
+    }
+    .built-by-star:hover { color: #C084FC; text-shadow: 0 0 15px rgba(168, 85, 247, 0.7), 0 0 35px rgba(168, 85, 247, 0.4); }
+    @keyframes starGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 25px rgba(168, 85, 247, 0.25); }
+      50% { text-shadow: 0 0 18px rgba(168, 85, 247, 0.7), 0 0 40px rgba(168, 85, 247, 0.4); }
+    }
+
+    /* ── Access Level Modal ── */
+    .access-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      z-index: 300; display: flex; align-items: center; justify-content: center;
+    }
+    .access-modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2.5rem; max-width: 420px; width: 90%; text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+    .access-modal h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .access-modal p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .access-roles { display: flex; flex-direction: column; gap: 0.75rem; }
+    .role-btn {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 1rem 1.25rem; border-radius: 12px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--input-bg);
+      color: var(--text-primary); font-size: 0.95rem; font-weight: 500;
+      transition: all 0.2s; text-align: left; font-family: inherit;
+    }
+    .role-btn:hover { border-color: var(--crimson-edge); transform: translateY(-2px); box-shadow: 0 4px 15px var(--glow); }
+    .role-icon { font-size: 1.3rem; }
+    .role-info { flex: 1; }
+    .role-info .role-name { font-weight: 600; }
+    .role-info .role-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.15rem; }
   </style>
 </head>
 <body>
@@ -334,7 +371,29 @@
 
   </div>
 
-  <footer>Staff Portal · Built with 🌹 for ROSOIDEAE</footer>
+  <footer>Staff Portal · <a href="built-by-star.html" class="built-by-star">⭐ Built by Star</a></footer>
+
+  <!-- ── Access Level Modal ── -->
+  <div class="access-modal-overlay" id="access-modal">
+    <div class="access-modal">
+      <h2>Select Access Level</h2>
+      <p>Choose your role to access the appropriate portal content.</p>
+      <div class="access-roles">
+        <button class="role-btn" onclick="setAccessLevel('public')">
+          <span class="role-icon">👤</span>
+          <div class="role-info"><div class="role-name">Public</div><div class="role-desc">View and submit staff applications</div></div>
+        </button>
+        <button class="role-btn" onclick="setAccessLevel('manager')">
+          <span class="role-icon">📋</span>
+          <div class="role-info"><div class="role-name">Manager</div><div class="role-desc">Access checkups, staff applications, and surveys</div></div>
+        </button>
+        <button class="role-btn" onclick="setAccessLevel('admin')">
+          <span class="role-icon">🔑</span>
+          <div class="role-info"><div class="role-name">Admin</div><div class="role-desc">Full access to all forms and admin reviews</div></div>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
     /* ══════════════════════════════════════════════════
@@ -382,6 +441,43 @@
       'Survey': { icon: '📊', css: 'survey' }
     };
 
+    // ── Access Level System ──
+    var currentAccessLevel = loadData('roso_access_level', null);
+
+    function setAccessLevel(level) {
+      currentAccessLevel = level;
+      saveData('roso_access_level', level);
+      document.getElementById('access-modal').style.display = 'none';
+      updateNavForAccess();
+      navigateTo('dashboard');
+    }
+
+    function showAccessModal() {
+      document.getElementById('access-modal').style.display = 'flex';
+    }
+
+    function updateNavForAccess() {
+      var navForms = document.getElementById('nav-forms');
+      var navApps = document.getElementById('nav-applications');
+      var navSubs = document.getElementById('nav-submissions');
+      if (currentAccessLevel === 'public') {
+        navForms.classList.add('hidden');
+      } else {
+        navForms.classList.remove('hidden');
+      }
+      navApps.classList.remove('hidden');
+      navSubs.classList.remove('hidden');
+    }
+
+    function getAccessibleForms(forms) {
+      if (currentAccessLevel === 'admin') return forms;
+      if (currentAccessLevel === 'manager') {
+        return forms.filter(function(f) { return f.type === 'Team Checkup' || f.type === 'Staff Application' || f.type === 'Survey'; });
+      }
+      // public
+      return forms.filter(function(f) { return f.type === 'Staff Application'; });
+    }
+
     // ── Seed Data ──
     function seedForms() {
       var forms = loadForms();
@@ -389,17 +485,19 @@
 
       var seed = [
         {
-          id: generateId(), type: 'Team Checkup', title: 'Weekly Team Checkup — Captain Review',
-          description: 'Weekly status checkup to be completed by team captains. Covers team morale, performance, blockers, and goals.',
-          createdBy: 'Director', createdAt: Date.now() - 172800000,
+          id: generateId(), type: 'Team Checkup', title: 'Manager 1-on-1 Checkup Template',
+          description: 'Template for managers conducting 1-on-1 checkups with team members. Focuses on individual growth, satisfaction, and feedback.',
+          createdBy: 'HR Director', createdAt: Date.now() - 345600000,
           questions: [
-            { id: generateId(), type: 'rating', text: 'How would you rate your team\'s overall performance this week?', hint: '1 = Poor, 5 = Excellent', required: true, max: 5 },
-            { id: generateId(), type: 'choice', text: 'What is the current team morale?', required: true, options: ['Excellent — highly motivated', 'Good — generally positive', 'Average — stable', 'Low — needs attention', 'Critical — immediate action required'] },
-            { id: generateId(), type: 'textarea', text: 'List the key accomplishments from this week.', hint: 'Be specific about deliverables and milestones.', required: true },
-            { id: generateId(), type: 'textarea', text: 'Are there any blockers or concerns?', hint: 'Include resource needs, conflicts, or technical issues.', required: false },
-            { id: generateId(), type: 'yesno', text: 'Is the team on track to meet this sprint\'s goals?', required: true },
-            { id: generateId(), type: 'textarea', text: 'What are the priorities for next week?', required: true },
-            { id: generateId(), type: 'text', text: 'Any additional comments or requests for leadership?', required: false }
+            { id: generateId(), type: 'text', text: 'Team member name:', required: true },
+            { id: generateId(), type: 'rating', text: 'How is this team member performing overall?', hint: '1 = Below expectations, 5 = Exceeding expectations', required: true, max: 5 },
+            { id: generateId(), type: 'choice', text: 'Engagement level:', required: true, options: ['Highly engaged', 'Engaged', 'Neutral', 'Disengaged', 'At risk of leaving'] },
+            { id: generateId(), type: 'textarea', text: 'Key strengths observed:', hint: 'List specific behaviors, accomplishments, and positive impacts this member has had.', required: true },
+            { id: generateId(), type: 'textarea', text: 'Areas for improvement or growth:', hint: 'Be constructive and include specific suggestions.', required: false },
+            { id: generateId(), type: 'yesno', text: 'Does this team member need additional support or resources?', required: true },
+            { id: generateId(), type: 'textarea', text: 'Action items from this checkup:', hint: 'Include deadlines and ownership for each item.', required: true },
+            { id: generateId(), type: 'rating', text: 'How well does this member collaborate with others?', hint: '1 = Rarely collaborates, 5 = Highly collaborative', required: true, max: 5 },
+            { id: generateId(), type: 'textarea', text: 'What goals should be set for the next review period?', required: true }
           ]
         },
         {
@@ -410,55 +508,77 @@
             { id: generateId(), type: 'choice', text: 'Department status overall:', required: true, options: ['On Track', 'Minor Issues', 'Needs Attention', 'Critical'] },
             { id: generateId(), type: 'rating', text: 'Rate the department\'s operational efficiency.', hint: '1 = Needs major improvement, 5 = Highly efficient', required: true, max: 5 },
             { id: generateId(), type: 'yesno', text: 'Are all compliance requirements being met?', required: true },
-            { id: generateId(), type: 'textarea', text: 'Summarize any compliance gaps or risks.', required: false },
-            { id: generateId(), type: 'textarea', text: 'Key achievements this month.', required: true },
+            { id: generateId(), type: 'textarea', text: 'Summarize any compliance gaps or risks.', hint: 'Detail each gap, its severity, and proposed resolution.', required: false },
+            { id: generateId(), type: 'textarea', text: 'Key achievements this month.', hint: 'Include metrics and tangible outcomes.', required: true },
             { id: generateId(), type: 'rating', text: 'Rate cross-team collaboration.', hint: '1 = Siloed, 5 = Highly collaborative', required: true, max: 5 },
             { id: generateId(), type: 'textarea', text: 'Strategic priorities for next month.', required: true },
-            { id: generateId(), type: 'text', text: 'Budget or resource concerns?', required: false }
+            { id: generateId(), type: 'text', text: 'Budget or resource concerns?', required: false },
+            { id: generateId(), type: 'choice', text: 'How would you rate staff retention in your department?', required: true, options: ['Excellent — no turnover concerns', 'Good — minor attrition', 'Fair — some concerning departures', 'Poor — significant turnover'] },
+            { id: generateId(), type: 'textarea', text: 'What process improvements would you recommend?', hint: 'Think about bottlenecks, communication gaps, and tooling.', required: true }
           ]
         },
         {
-          id: generateId(), type: 'Team Checkup', title: 'Manager 1-on-1 Checkup Template',
-          description: 'Template for managers conducting 1-on-1 checkups with team members. Focuses on individual growth, satisfaction, and feedback.',
-          createdBy: 'HR Director', createdAt: Date.now() - 345600000,
-          questions: [
-            { id: generateId(), type: 'text', text: 'Team member name:', required: true },
-            { id: generateId(), type: 'rating', text: 'How is this team member performing overall?', hint: '1 = Below expectations, 5 = Exceeding expectations', required: true, max: 5 },
-            { id: generateId(), type: 'choice', text: 'Engagement level:', required: true, options: ['Highly engaged', 'Engaged', 'Neutral', 'Disengaged', 'At risk of leaving'] },
-            { id: generateId(), type: 'textarea', text: 'Key strengths observed:', required: true },
-            { id: generateId(), type: 'textarea', text: 'Areas for improvement or growth:', required: false },
-            { id: generateId(), type: 'yesno', text: 'Does this team member need additional support or resources?', required: true },
-            { id: generateId(), type: 'textarea', text: 'Action items from this checkup:', required: true }
-          ]
-        },
-        {
-          id: generateId(), type: 'Staff Application', title: 'Moderator Application',
-          description: 'Apply to become a moderator. We\'re looking for dedicated community members with strong communication skills and availability.',
+          id: generateId(), type: 'Staff Application', title: 'Admin Application — Esports Moderation',
+          description: 'Apply to join the Admin team. We are looking for experienced moderators who understand esports communities, player behavior, and can enforce policies fairly and consistently.',
           createdBy: 'Admin Team', createdAt: Date.now() - 432000000,
           questions: [
-            { id: generateId(), type: 'text', text: 'What is your current role/username?', required: true },
-            { id: generateId(), type: 'text', text: 'How long have you been part of the team?', required: true },
-            { id: generateId(), type: 'textarea', text: 'Why do you want to become a moderator?', hint: 'Explain your motivation and what you would bring to the role.', required: true },
-            { id: generateId(), type: 'textarea', text: 'Describe your experience with team management or moderation.', required: true },
+            { id: generateId(), type: 'text', text: 'What is your Discord username and any other relevant handles?', required: true },
+            { id: generateId(), type: 'text', text: 'How long have you been involved in esports communities?', required: true },
+            { id: generateId(), type: 'textarea', text: 'Describe your previous moderation experience in esports or gaming communities.', hint: 'Include community names, your role, size of the community, and duration.', required: true },
+            { id: generateId(), type: 'textarea', text: 'A player is accusing another of stream sniping during a competitive match, and the chat is becoming toxic. How do you handle this situation?', hint: 'Walk us through your step-by-step approach, including how you de-escalate, investigate, and communicate a resolution.', required: true },
+            { id: generateId(), type: 'textarea', text: 'You discover that a well-known community figure is subtly breaking rules (e.g., soft-griefing, passive toxicity). Their fans defend them. What do you do?', hint: 'We want to see your ability to enforce rules impartially regardless of community status.', required: true },
+            { id: generateId(), type: 'choice', text: 'Which moderation philosophy resonates most with you?', required: true, options: ['Prevention — proactive community guidelines and education', 'Enforcement — clear rules and consistent consequences', 'Restorative — focus on rehabilitation and second chances', 'Balanced — adapt approach based on the situation'] },
+            { id: generateId(), type: 'textarea', text: 'How do you stay neutral and avoid burnout when moderating heated esports discussions or drama?', required: true },
+            { id: generateId(), type: 'textarea', text: 'An organized group is coordinating off-platform to brigade the community chat during a live tournament. How do you identify and respond to this?', hint: 'Consider tools, escalation paths, and communication strategies.', required: true },
+            { id: generateId(), type: 'rating', text: 'Rate your familiarity with moderation tools (Discord bots, Twitch mod tools, anti-cheat reporting systems, etc.).', hint: '1 = Beginner, 5 = Expert', required: true, max: 5 },
             { id: generateId(), type: 'choice', text: 'What timezone are you in?', required: true, options: ['UTC-8 to UTC-5 (Americas)', 'UTC-1 to UTC+2 (Europe/Africa)', 'UTC+3 to UTC+5.5 (Middle East/South Asia)', 'UTC+6 to UTC+12 (East Asia/Oceania)'] },
-            { id: generateId(), type: 'rating', text: 'How would you rate your availability? (hours per week)', hint: '1 = 1-5 hrs, 2 = 5-10 hrs, 3 = 10-15 hrs, 4 = 15-20 hrs, 5 = 20+ hrs', required: true, max: 5 },
-            { id: generateId(), type: 'textarea', text: 'How would you handle a conflict between two team members?', hint: 'Give a specific example or scenario.', required: true },
-            { id: generateId(), type: 'yesno', text: 'Are you willing to attend weekly moderator meetings?', required: true },
-            { id: generateId(), type: 'text', text: 'Anything else you\'d like us to know?', required: false }
+            { id: generateId(), type: 'rating', text: 'How many hours per week can you dedicate to moderation?', hint: '1 = 1-5 hrs, 2 = 5-10 hrs, 3 = 10-15 hrs, 4 = 15-20 hrs, 5 = 20+ hrs', required: true, max: 5 },
+            { id: generateId(), type: 'textarea', text: 'What does a healthy esports community look like to you, and what role does moderation play in achieving that?', required: true },
+            { id: generateId(), type: 'yesno', text: 'Are you willing to attend weekly admin sync meetings and participate in policy reviews?', required: true },
+            { id: generateId(), type: 'textarea', text: 'Is there anything else you want us to know about you or your approach to moderation?', required: false }
           ]
         },
         {
-          id: generateId(), type: 'Staff Application', title: 'Support Team Application',
-          description: 'Apply to join the support team. Help resolve issues, assist community members, and improve the overall experience.',
+          id: generateId(), type: 'Staff Application', title: 'Social Application — Content & Media',
+          description: 'Apply to join the Social team. We need creative individuals skilled in social media management, video editing, graphic design, and content strategy to grow the Rosoideae brand.',
           createdBy: 'Admin Team', createdAt: Date.now() - 518400000,
           questions: [
-            { id: generateId(), type: 'text', text: 'Your username / display name:', required: true },
-            { id: generateId(), type: 'textarea', text: 'Why do you want to join the support team?', required: true },
-            { id: generateId(), type: 'textarea', text: 'Describe any relevant support or customer service experience.', required: true },
-            { id: generateId(), type: 'choice', text: 'Preferred support channel:', required: true, options: ['Live Chat', 'Tickets / Email', 'Voice / Calls', 'All of the above'] },
-            { id: generateId(), type: 'rating', text: 'Rate your communication skills.', hint: '1 = Basic, 5 = Excellent', required: true, max: 5 },
-            { id: generateId(), type: 'yesno', text: 'Can you commit to a minimum of 8 hours per week?', required: true },
-            { id: generateId(), type: 'text', text: 'Additional notes or questions:', required: false }
+            { id: generateId(), type: 'text', text: 'What is your name/username and your social media handles?', required: true },
+            { id: generateId(), type: 'choice', text: 'Which area of social media are you most experienced in?', required: true, options: ['Content creation (graphics, thumbnails, banners)', 'Video editing (highlights, montages, recaps)', 'Social media management (posting, scheduling, engagement)', 'Copywriting & branding', 'All of the above'] },
+            { id: generateId(), type: 'textarea', text: 'Tell us about your experience with social media or content creation.', hint: 'Include platforms you\'ve managed, follower counts, engagement metrics, or portfolio links.', required: true },
+            { id: generateId(), type: 'textarea', text: 'What editing software and design tools are you proficient in?', hint: 'E.g., Premiere Pro, After Effects, Photoshop, Canva, CapCut, DaVinci Resolve, Figma, etc.', required: true },
+            { id: generateId(), type: 'textarea', text: 'How would you approach growing Rosoideae\'s presence on social media from the ground up?', hint: 'Include platform priorities, content pillars, posting frequency, and engagement strategy.', required: true },
+            { id: generateId(), type: 'textarea', text: 'Describe a piece of content you\'ve created that you\'re proud of. What made it successful?', hint: 'Link it if possible, or describe the concept, execution, and results.', required: true },
+            { id: generateId(), type: 'choice', text: 'How familiar are you with esports content trends?', required: true, options: ['Very familiar — I follow esports closely and consume/create content daily', 'Somewhat familiar — I keep up with major events and trends', 'Slightly familiar — I know the basics but I\'m eager to learn', 'New to esports — but I have strong social media skills'] },
+            { id: generateId(), type: 'textarea', text: 'A tournament just ended with an exciting finals. You need to produce a social media recap within 2 hours. Walk us through your process.', hint: 'Consider what content formats you\'d create, which platforms you\'d prioritize, and how you\'d capture the hype.', required: true },
+            { id: generateId(), type: 'rating', text: 'Rate your video editing skills.', hint: '1 = Basic cuts only, 5 = Advanced motion graphics and effects', required: true, max: 5 },
+            { id: generateId(), type: 'rating', text: 'Rate your graphic design skills.', hint: '1 = Basic, 5 = Professional-level design', required: true, max: 5 },
+            { id: generateId(), type: 'text', text: 'Link your portfolio, social accounts, or any relevant work samples:', hint: 'Provide URLs separated by commas.', required: false },
+            { id: generateId(), type: 'rating', text: 'How many hours per week can you dedicate to content creation?', hint: '1 = 1-5 hrs, 2 = 5-10 hrs, 3 = 10-15 hrs, 4 = 15-20 hrs, 5 = 20+ hrs', required: true, max: 5 },
+            { id: generateId(), type: 'yesno', text: 'Are you comfortable working under tight deadlines during live events?', required: true },
+            { id: generateId(), type: 'textarea', text: 'What unique creative vision would you bring to the Rosoideae brand?', required: true }
+          ]
+        },
+        {
+          id: generateId(), type: 'Staff Application', title: 'Tournament Application — Production & Casting',
+          description: 'Apply to join the Tournament team. We are looking for passionate individuals to help with tournament production, casting, event coordination, and broadcast quality for events hosted by Rosoideae.',
+          createdBy: 'Admin Team', createdAt: Date.now() - 604800000,
+          questions: [
+            { id: generateId(), type: 'text', text: 'What is your name/username and any relevant platform handles?', required: true },
+            { id: generateId(), type: 'choice', text: 'Which tournament role are you most interested in?', required: true, options: ['Caster / Commentator', 'Producer / Director', 'Observer / Camera Operator', 'Tournament Organizer / Admin', 'Broadcast Technician (OBS, overlays, transitions)', 'Multiple roles — I\'m versatile'] },
+            { id: generateId(), type: 'textarea', text: 'Describe your experience with tournament production, casting, or esports events.', hint: 'Include event names, your specific role, team size, and viewership if applicable.', required: true },
+            { id: generateId(), type: 'textarea', text: 'You\'re casting a live match and the stream goes down for 3 minutes mid-round. How do you handle the situation when the stream comes back?', hint: 'Consider viewer experience, catching up on missed action, and maintaining energy.', required: true },
+            { id: generateId(), type: 'textarea', text: 'A team fails to show up for their scheduled match in a bracket tournament. Walk us through how you\'d handle this as a tournament admin.', hint: 'Consider rules enforcement, communication with teams, bracket adjustments, and viewer/audience communication.', required: true },
+            { id: generateId(), type: 'choice', text: 'What production software are you familiar with?', required: true, options: ['OBS Studio / Streamlabs', 'vMix', 'Wirecast', 'Multiple professional tools', 'I\'m willing to learn'] },
+            { id: generateId(), type: 'textarea', text: 'If you were to produce a Rosoideae-branded tournament from scratch, describe your ideal broadcast setup.', hint: 'Think about overlays, transitions, camera angles, audio mixing, branding elements, and viewer engagement features.', required: true },
+            { id: generateId(), type: 'rating', text: 'Rate your public speaking / casting ability.', hint: '1 = Nervous / new to it, 5 = Confident and experienced on-air talent', required: true, max: 5 },
+            { id: generateId(), type: 'textarea', text: 'What makes a great esports broadcast in your opinion? Name a broadcast you admire and explain why.', required: true },
+            { id: generateId(), type: 'choice', text: 'What timezone are you in?', required: true, options: ['UTC-8 to UTC-5 (Americas)', 'UTC-1 to UTC+2 (Europe/Africa)', 'UTC+3 to UTC+5.5 (Middle East/South Asia)', 'UTC+6 to UTC+12 (East Asia/Oceania)'] },
+            { id: generateId(), type: 'rating', text: 'How many hours per week can you dedicate to tournament work?', hint: '1 = 1-5 hrs, 2 = 5-10 hrs, 3 = 10-15 hrs, 4 = 15-20 hrs, 5 = 20+ hrs', required: true, max: 5 },
+            { id: generateId(), type: 'yesno', text: 'Are you available for weekend events and flexible scheduling around tournament dates?', required: true },
+            { id: generateId(), type: 'textarea', text: 'How would you handle a dispute between two teams during a live, broadcasted match regarding a controversial play?', hint: 'Consider the balance between fair ruling, broadcast flow, and audience experience.', required: true },
+            { id: generateId(), type: 'text', text: 'Link any VODs, clips, or portfolio of your casting/production work:', required: false },
+            { id: generateId(), type: 'textarea', text: 'Anything else you\'d like us to know about your passion for esports production?', required: false }
           ]
         },
         {
@@ -539,7 +659,8 @@
 
     // ── Dashboard ──
     function renderDashboard() {
-      var forms = loadForms();
+      var allForms = loadForms();
+      var forms = getAccessibleForms(allForms);
       var subs = loadSubmissions();
       var checkups = forms.filter(function(f) { return f.type === 'Team Checkup' || f.type === 'Admin Review'; });
       var apps = forms.filter(function(f) { return f.type === 'Staff Application'; });
@@ -590,9 +711,12 @@
 
     // ── Forms Page ──
     function renderFormsPage() {
-      var forms = loadForms();
+      var allForms = loadForms();
+      var forms = getAccessibleForms(allForms);
       var nonAppForms = forms.filter(function(f) { return f.type !== 'Staff Application'; });
-      var types = ['all', 'Team Checkup', 'Admin Review', 'Survey'];
+      var types = ['all'];
+      if (currentAccessLevel === 'admin') { types.push('Team Checkup', 'Admin Review', 'Survey'); }
+      else if (currentAccessLevel === 'manager') { types.push('Team Checkup', 'Survey'); }
 
       // Tabs
       var tabHtml = '';
@@ -610,7 +734,8 @@
 
     // ── Applications Page ──
     function renderApplicationsPage() {
-      var forms = loadForms();
+      var allForms = loadForms();
+      var forms = getAccessibleForms(allForms);
       var appForms = forms.filter(function(f) { return f.type === 'Staff Application'; });
       document.getElementById('applications-list').innerHTML = renderFormCards(appForms, 'applications');
     }
@@ -925,7 +1050,18 @@
     }
 
     // ── Init ──
+    // Clear seed data to apply new forms
+    if (!loadData('roso_seed_reset_v2', false)) {
+      saveData('roso_forms', []);
+      saveData('roso_seed_reset_v2', true);
+    }
     seedForms();
+
+    // Show access level modal if not set
+    if (currentAccessLevel) {
+      document.getElementById('access-modal').style.display = 'none';
+      updateNavForAccess();
+    }
     navigateTo('dashboard');
   </script>
 </body>
