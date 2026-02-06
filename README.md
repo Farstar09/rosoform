@@ -1,6 +1,6 @@
-# ROSOIDEAE Internal Staff Hub
+# ROSOIDEAE Staff Portal
 
-An internal staff platform with a dark modern aesthetic, used for hosting staff applications, manager checkups, polls, and team discussions.
+An internal staff portal for answering pre-made questionnaires, completing team and admin checkups, and submitting staff applications. Built with a modern dark aesthetic.
 
 ## 🌹 Architecture Overview
 
@@ -39,25 +39,23 @@ Dynamic gradient computation provides animated color transitions throughout the 
 
 ## ✨ Key Features
 
-### 1. Staff Hub
-- **Staff Applications**: Submit and review staff applications
-- **Manager Checkups**: Weekly status updates and team check-ins
-- **Polls**: Internal surveys and preference gathering
-- **Announcements**: Company-wide staff communications
-- **Internal Discussion**: Team conversations and coordination
+### 1. Questionnaire & Form Platform
+- **Pre-built Forms**: Answer questionnaires created by captains, managers, and admin directors
+- **Team Checkups**: Weekly status checkups completed by team captains and managers
+- **Admin Reviews**: Monthly administrative reviews by admin directors
+- **Surveys**: Internal satisfaction surveys and feedback collection
+- **Multiple Question Types**: Text, textarea, multiple choice, rating scale (1-5), and yes/no
 
-### 2. Admin/Manager Tools
-- **Identity Vault**: Cryptographic authentication system
-- **Privilege Hierarchy**: Role-based access control
-- **Direct Editing**: In-place content moderation
-- **Analytics Dashboard**: Pulse tracking and metrics
-- **Session Management**: Secure token handling
+### 2. Staff Applications
+- **Application Forms**: Apply for open staff positions (Moderator, Support Team, etc.)
+- **Structured Responses**: Each application is a guided questionnaire with required fields
+- **Submission Tracking**: Review submitted applications with full answer detail
 
-### 3. User Profiles
-- **Identity Registry**: Comprehensive user system
-- **Visual Customization**: Avatar and biography support
-- **Activity Tracking**: Engagement metrics
-- **Privilege Management**: Dynamic role assignment
+### 3. Dashboard & Submissions
+- **Dashboard Overview**: Stats cards showing total forms, submissions, checkups, and open applications
+- **Submissions History**: Review all completed questionnaires and application responses
+- **Filterable Views**: Filter forms and submissions by type (Team Checkup, Admin Review, Staff Application, Survey)
+- **Progress Tracking**: Real-time progress bar while filling out forms
 
 ## 🔧 Technical Components
 
