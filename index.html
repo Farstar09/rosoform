@@ -385,7 +385,7 @@
         </button>
         <button class="role-btn" onclick="setAccessLevel('manager')">
           <span class="role-icon">📋</span>
-          <div class="role-info"><div class="role-name">Manager</div><div class="role-desc">Access manager checkup forms</div></div>
+          <div class="role-info"><div class="role-name">Manager</div><div class="role-desc">Access checkups, staff applications, and surveys</div></div>
         </button>
         <button class="role-btn" onclick="setAccessLevel('admin')">
           <span class="role-icon">🔑</span>
@@ -1051,9 +1051,9 @@
 
     // ── Init ──
     // Clear seed data to apply new forms
-    if (!loadData('roso_forms_v2', false)) {
+    if (!loadData('roso_seed_reset_v2', false)) {
       saveData('roso_forms', []);
-      saveData('roso_forms_v2', true);
+      saveData('roso_seed_reset_v2', true);
     }
     seedForms();
 
