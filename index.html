@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ROSOIDEAE — Advanced Forum Platform</title>
-  <meta name="description" content="A sophisticated forum platform with real-time discussions, nested threads, and comprehensive admin tools." />
+  <title>ROSOIDEAE — Forum</title>
+  <meta name="description" content="ROSOIDEAE forum platform with discussions, nested threads, and admin tools." />
   <style>
     :root {
       --deep-night: #1A0B1F;
@@ -14,282 +14,617 @@
       --text-primary: #E8D5F0;
       --text-muted: #A889B8;
       --surface: #2A1433;
+      --surface-hover: #361A42;
+      --success: #28A745;
+      --input-bg: #0F0716;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: var(--deep-night);
       color: var(--text-primary);
-      line-height: 1.7;
+      line-height: 1.6;
       min-height: 100vh;
     }
-
-    .hero-section {
-      text-align: center;
-      padding: 5rem 1.5rem 3rem;
-      background: linear-gradient(170deg, var(--deep-night) 0%, var(--roso-purple) 55%, var(--crimson-edge) 100%);
+    /* ── Header / Navbar ── */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(90deg, var(--deep-night), var(--roso-purple));
       border-bottom: 2px solid var(--blood-moon);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
-    .hero-section h1 {
-      font-size: 3rem;
-      letter-spacing: 0.15em;
-      margin-bottom: 0.75rem;
+    .site-header .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      cursor: pointer;
       background: linear-gradient(90deg, var(--text-primary), #C77DFF);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
-    .hero-section p {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 640px;
-      margin: 0 auto;
-    }
-
-    .badge-row {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.3rem 0.85rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border: 1px solid var(--text-muted);
-      color: var(--text-muted);
-    }
-
-    .content-wrap {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 4rem;
-    }
-
-    .section-title {
-      font-size: 1.6rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--roso-purple);
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 3rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--roso-purple);
-      border-radius: 10px;
-      padding: 1.5rem;
-      transition: border-color 0.25s, transform 0.25s;
-    }
-
-    .card:hover {
-      border-color: var(--crimson-edge);
-      transform: translateY(-3px);
-    }
-
-    .card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: #C77DFF;
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .directory-layout {
-      background: var(--surface);
-      border: 1px solid var(--roso-purple);
-      border-radius: 10px;
-      padding: 1.5rem 2rem;
-      font-family: 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 0.85rem;
-      line-height: 1.9;
-      overflow-x: auto;
-      margin-bottom: 3rem;
-      white-space: pre;
-      color: var(--text-muted);
-    }
-
-    .directory-layout strong {
-      color: #C77DFF;
-    }
-
-    .palette-strip {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-
-    .swatch {
-      flex: 1 1 120px;
-      padding: 1.25rem;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .swatch-label {
-      display: block;
-      margin-top: 0.35rem;
-      font-size: 0.75rem;
-      opacity: 0.8;
-    }
-
-    .links-row {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .links-row a {
+    .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+    .nav-btn {
+      background: transparent;
       color: var(--text-primary);
-      text-decoration: none;
-      padding: 0.6rem 1.4rem;
       border: 1px solid var(--roso-purple);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
       transition: background 0.2s, border-color 0.2s;
     }
-
-    .links-row a:hover {
-      background: var(--roso-purple);
-      border-color: var(--crimson-edge);
+    .nav-btn:hover, .nav-btn.active { background: var(--roso-purple); border-color: var(--crimson-edge); }
+    .nav-btn.primary { background: linear-gradient(135deg, var(--crimson-edge), var(--blood-moon)); border-color: var(--crimson-edge); font-weight: 600; }
+    .nav-btn.primary:hover { opacity: 0.9; }
+    /* ── Layout ── */
+    .app-container { max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+    .hidden { display: none !important; }
+    /* ── Category Sidebar ── */
+    .forum-layout { display: flex; gap: 1.5rem; align-items: flex-start; }
+    .category-sidebar { flex: 0 0 200px; }
+    .category-sidebar h3 { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+    .cat-list { list-style: none; }
+    .cat-item {
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      transition: background 0.15s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--roso-purple);
+    .cat-item:hover { background: var(--surface); }
+    .cat-item.active { background: var(--roso-purple); color: #fff; }
+    .cat-count { font-size: 0.75rem; color: var(--text-muted); background: var(--deep-night); padding: 0.1rem 0.5rem; border-radius: 10px; }
+    .cat-item.active .cat-count { background: var(--blood-moon); color: #fff; }
+    .thread-panel { flex: 1; min-width: 0; }
+    /* ── Thread List ── */
+    .thread-list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .thread-list-header h2 { font-size: 1.3rem; }
+    .thread-card {
+      background: var(--surface);
+      border: 1px solid var(--roso-purple);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
     }
+    .thread-card:hover { border-color: var(--crimson-edge); transform: translateY(-2px); }
+    .thread-card .thread-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.3rem; color: #C77DFF; }
+    .thread-card .thread-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 1rem; flex-wrap: wrap; }
+    .thread-card .thread-preview { font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+    .empty-state p { margin-bottom: 1rem; }
+    /* ── Thread View ── */
+    .thread-view-header { margin-bottom: 1.5rem; }
+    .thread-view-header h2 { font-size: 1.5rem; margin-bottom: 0.35rem; }
+    .thread-view-header .meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .thread-body { background: var(--surface); border: 1px solid var(--roso-purple); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; line-height: 1.7; white-space: pre-wrap; }
+    .back-btn { background: none; border: none; color: #C77DFF; cursor: pointer; font-size: 0.9rem; margin-bottom: 1rem; padding: 0; }
+    .back-btn:hover { text-decoration: underline; }
+    /* ── Replies ── */
+    .replies-section h3 { font-size: 1.1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--roso-purple); padding-bottom: 0.4rem; }
+    .reply-node {
+      border-left: 3px solid var(--crimson-edge);
+      background: linear-gradient(135deg, var(--surface) 0%, var(--deep-night) 100%);
+      border-radius: 0 8px 8px 0;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .reply-node .reply-author { color: var(--crimson-edge); font-weight: 700; font-size: 0.85rem; margin-bottom: 0.25rem; }
+    .reply-node .reply-text { font-size: 0.92rem; line-height: 1.6; white-space: pre-wrap; }
+    .reply-node .reply-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem; display: flex; gap: 1rem; align-items: center; }
+    .reply-btn-small { background: none; border: none; color: #C77DFF; cursor: pointer; font-size: 0.75rem; }
+    .reply-btn-small:hover { text-decoration: underline; }
+    .reply-children { margin-left: 1.25rem; margin-top: 0.5rem; }
+    .resonance-badge { font-family: monospace; font-size: 0.7rem; color: var(--crimson-edge); }
+    /* ── Forms ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--roso-purple);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--crimson-edge); }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select option { background: var(--deep-night); }
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: linear-gradient(135deg, var(--crimson-edge), var(--blood-moon)); color: #fff; }
+    .btn-secondary { background: transparent; border: 1px solid var(--roso-purple); color: var(--text-primary); }
+    .btn-secondary:hover { background: var(--roso-purple); }
+    .form-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    /* ── Reply Form (inline) ── */
+    .reply-form { margin-top: 1rem; }
+    .reply-form .form-textarea { min-height: 80px; }
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .forum-layout { flex-direction: column; }
+      .category-sidebar { flex: none; width: 100%; }
+      .cat-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .cat-item { flex: 0 0 auto; }
+    }
+    footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--roso-purple); margin-top: 2rem; }
   </style>
 </head>
 <body>
 
-  <header class="hero-section">
-    <h1>🌹 ROSOIDEAE</h1>
-    <p>A sophisticated forum platform with dark purple/red/black aesthetic, featuring real-time discussions, nested threads, and comprehensive admin tools.</p>
-    <div class="badge-row">
-      <span class="badge">React</span>
-      <span class="badge">Node.js</span>
-      <span class="badge">PostgreSQL</span>
-      <span class="badge">WebSocket</span>
-      <span class="badge">Docker</span>
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <span class="logo" onclick="navigateTo('home')">🌹 ROSOIDEAE</span>
+    <div class="nav-links">
+      <button class="nav-btn active" id="nav-home" onclick="navigateTo('home')">Forum</button>
+      <button class="nav-btn primary" id="nav-new" onclick="navigateTo('new-thread')">+ New Thread</button>
     </div>
   </header>
 
-  <main class="content-wrap">
+  <div class="app-container">
 
-    <h2 class="section-title">✨ Key Features</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Public Forum</h3>
-        <p>Categorized discussions with nested replies, resonance scoring, real-time WebSocket updates, and Markdown support.</p>
-      </div>
-      <div class="card">
-        <h3>Admin &amp; Manager Tools</h3>
-        <p>Cryptographic identity vault, privilege hierarchy, direct content editing, analytics dashboard, and session management.</p>
-      </div>
-      <div class="card">
-        <h3>User Profiles</h3>
-        <p>Comprehensive identity registry, avatar customization, activity tracking, and dynamic role assignment.</p>
-      </div>
-      <div class="card">
-        <h3>Harmonic Resonance</h3>
-        <p>Match related discussions using wave-physics-inspired waveform signatures and interference pattern calculation.</p>
-      </div>
-      <div class="card">
-        <h3>Thought Weaver</h3>
-        <p>Discover semantic connections through trigram frequency analysis, vowel-consonant rhythm patterns, and density metrics.</p>
-      </div>
-      <div class="card">
-        <h3>Pulse Visualizer</h3>
-        <p>Canvas-based particle system with gravity attraction, dynamic HSL color shifts, heat maps, and 60fps rendering.</p>
+    <!-- ════ HOME / THREAD LIST ════ -->
+    <div id="view-home">
+      <div class="forum-layout">
+        <aside class="category-sidebar">
+          <h3>Categories</h3>
+          <ul class="cat-list" id="category-list"></ul>
+        </aside>
+        <section class="thread-panel">
+          <div class="thread-list-header">
+            <h2 id="thread-list-title">All Discussions</h2>
+          </div>
+          <div id="thread-list"></div>
+        </section>
       </div>
     </div>
 
-    <h2 class="section-title">📂 Project Layout</h2>
-    <div class="directory-layout"><strong>visual/</strong>          Frontend — React components, theme, interactions
-<strong>logic/</strong>           Business logic — orchestration, calculations, transformations
-<strong>connectivity/</strong>    Backend — Express endpoints, auth, WebSocket streaming
-<strong>storage/</strong>         Database — PostgreSQL schemas, migrations, analytics
-<strong>orchestration/</strong>   Deployment — Docker, Vercel configs</div>
-
-    <h2 class="section-title">🎨 Color Palette</h2>
-    <div class="palette-strip">
-      <div class="swatch" style="background:#1A0B1F;color:#E8D5F0;">Deep Night<span class="swatch-label">#1A0B1F</span></div>
-      <div class="swatch" style="background:#5D2E6B;color:#E8D5F0;">Roso Purple<span class="swatch-label">#5D2E6B</span></div>
-      <div class="swatch" style="background:#9C1B1B;color:#E8D5F0;">Crimson Edge<span class="swatch-label">#9C1B1B</span></div>
-      <div class="swatch" style="background:#6B0F0F;color:#E8D5F0;">Blood Moon<span class="swatch-label">#6B0F0F</span></div>
+    <!-- ════ NEW THREAD ════ -->
+    <div id="view-new-thread" class="hidden">
+      <h2 style="margin-bottom:1rem;">Create a New Thread</h2>
+      <form id="new-thread-form" onsubmit="handleCreateThread(event)">
+        <div class="form-group">
+          <label for="nt-author">Your Name</label>
+          <input class="form-input" id="nt-author" required placeholder="Enter your display name" maxlength="60" />
+        </div>
+        <div class="form-group">
+          <label for="nt-category">Category</label>
+          <select class="form-select" id="nt-category" required></select>
+        </div>
+        <div class="form-group">
+          <label for="nt-title">Title</label>
+          <input class="form-input" id="nt-title" required placeholder="Thread title" maxlength="200" />
+        </div>
+        <div class="form-group">
+          <label for="nt-body">Body</label>
+          <textarea class="form-textarea" id="nt-body" required placeholder="Write your opening post…" maxlength="5000"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Post Thread</button>
+          <button type="button" class="btn btn-secondary" onclick="navigateTo('home')">Cancel</button>
+        </div>
+      </form>
     </div>
 
-    <h2 class="section-title">🔐 Security</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>PBKDF2 Password Scrambling</h3>
-        <p>15,000 iterations with SHA-512 for secure credential storage.</p>
+    <!-- ════ THREAD VIEW ════ -->
+    <div id="view-thread" class="hidden">
+      <button class="back-btn" onclick="navigateTo('home')">← Back to discussions</button>
+      <div class="thread-view-header">
+        <h2 id="tv-title"></h2>
+        <div class="meta" id="tv-meta"></div>
       </div>
-      <div class="card">
-        <h3>HMAC-SHA256 Tokens</h3>
-        <p>Cryptographic token signing with configurable lifespan and timing-safe comparison.</p>
+      <div class="thread-body" id="tv-body"></div>
+
+      <div class="replies-section">
+        <h3 id="replies-heading">Replies</h3>
+        <div id="replies-container"></div>
       </div>
-      <div class="card">
-        <h3>Role-Based Access</h3>
-        <p>Privilege hierarchy with administrator overrides and session revocation.</p>
+
+      <!-- Reply form -->
+      <div class="reply-form" id="root-reply-form">
+        <h3 style="font-size:1rem; margin-bottom:0.5rem;">Post a Reply</h3>
+        <div class="form-group">
+          <input class="form-input" id="reply-author" required placeholder="Your name" maxlength="60" />
+        </div>
+        <div class="form-group">
+          <textarea class="form-textarea" id="reply-body" required placeholder="Write your reply…" maxlength="5000"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="handlePostReply(null)">Reply</button>
       </div>
     </div>
 
-    <h2 class="section-title">📊 Custom Algorithms</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3>Resonance Scoring</h3>
-        <p>resonance = (word_density × 0.4) + (unique_chars × 0.3) + (sentence_count × 10)</p>
-      </div>
-      <div class="card">
-        <h3>Dynamic Color Computation</h3>
-        <p>Phase-shifted sine waves generate RGB values for animated gradients.</p>
-      </div>
-      <div class="card">
-        <h3>Temporal Flow Analysis</h3>
-        <p>Time-series decomposition with trend, seasonal, and residual components plus momentum indicators.</p>
-      </div>
-    </div>
+  </div>
 
-    <div class="links-row">
-      <a href="https://github.com/Farstar09/rosoform">📦 Repository</a>
-      <a href="https://github.com/Farstar09/rosoform/blob/main/ARCHITECTURE.md">📐 Architecture</a>
-      <a href="https://github.com/Farstar09/rosoform/blob/main/QUICKSTART.md">🚀 Quick Start</a>
-    </div>
+  <footer>Built with 🌹 for ROSOIDEAE</footer>
 
-  </main>
+  <script>
+    /* ══════════════════════════════════════════
+       ROSOIDEAE Forum — Client-Side Application
+       ══════════════════════════════════════════ */
 
-  <footer>
-    Built with 🌹 for ROSOIDEAE
-  </footer>
+    // ── Categories ──
+    const CATEGORIES = ['General', 'Introductions', 'Ideas', 'Feedback', 'Off-Topic'];
+    const MAX_REPLY_DEPTH = 5;
 
+    // ── Helpers ──
+    function generateId() {
+      return 'roso_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+    }
+
+    function escapeHtml(text) {
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function timeAgo(ts) {
+      var diff = Date.now() - ts;
+      var mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return mins + 'm ago';
+      var hrs = Math.floor(mins / 60);
+      if (hrs < 24) return hrs + 'h ago';
+      var days = Math.floor(hrs / 24);
+      if (days < 30) return days + 'd ago';
+      return new Date(ts).toLocaleDateString();
+    }
+
+    function computeResonance(text) {
+      var words = text.trim().split(/\s+/).length;
+      var density = words / Math.max(text.length, 1);
+      var uniqueChars = new Set(text.toLowerCase()).size;
+      var sentences = (text.match(/[.!?]+/g) || []).length || 1;
+      return parseFloat(((density * 0.4) + (uniqueChars * 0.3) + (sentences * 10)).toFixed(1));
+    }
+
+    // ── Storage ──
+    function loadThreads() {
+      try { return JSON.parse(localStorage.getItem('roso_threads') || '[]'); }
+      catch (err) { console.warn('Failed to load threads:', err); return []; }
+    }
+    function saveThreads(threads) {
+      localStorage.setItem('roso_threads', JSON.stringify(threads));
+    }
+
+    // ── Seed Data ──
+    function seedIfEmpty() {
+      var threads = loadThreads();
+      if (threads.length > 0) return;
+      var now = Date.now();
+      var seed = [
+        {
+          id: generateId(), category: 'General', title: 'Welcome to ROSOIDEAE!',
+          body: 'Welcome to the ROSOIDEAE forum. This is a space for open discussion, ideas, and community building.\n\nFeel free to create threads, reply to others, and explore the nested conversation system.',
+          author: 'Admin', createdAt: now - 86400000,
+          replies: [
+            { id: generateId(), author: 'Rosalind', text: 'Great to be here! Looking forward to some deep discussions.', createdAt: now - 72000000, parentId: null, resonance: 13.2, replies: [
+              { id: generateId(), author: 'Admin', text: 'Welcome aboard! Feel free to start any thread you like.', createdAt: now - 68000000, parentId: null, resonance: 11.8, replies: [] }
+            ]},
+            { id: generateId(), author: 'Marcus', text: 'The aesthetic of this platform is stunning. Love the color scheme.', createdAt: now - 60000000, parentId: null, resonance: 14.5, replies: [] }
+          ]
+        },
+        {
+          id: generateId(), category: 'Ideas', title: 'Feature Request: Markdown Support',
+          body: 'It would be great to have full markdown support in posts. Bold, italics, code blocks, lists — the works.\n\nWhat does everyone think?',
+          author: 'DevUser', createdAt: now - 43200000,
+          replies: [
+            { id: generateId(), author: 'Rosalind', text: 'Absolutely, markdown would be a huge improvement for code-related discussions.', createdAt: now - 40000000, parentId: null, resonance: 12.1, replies: [] }
+          ]
+        },
+        {
+          id: generateId(), category: 'Introductions', title: 'Hi, I\'m new here!',
+          body: 'Just joined the community. I\'m interested in web development and design. Looking forward to connecting with everyone!',
+          author: 'NewMember', createdAt: now - 21600000,
+          replies: []
+        }
+      ];
+      seed.forEach(function(t) { t.resonance = computeResonance(t.body); });
+      saveThreads(seed);
+    }
+
+    // ── State ──
+    var currentView = 'home';
+    var currentCategory = null; // null = all
+    var currentThreadId = null;
+
+    // ── Navigation ──
+    function navigateTo(view, data) {
+      document.getElementById('view-home').classList.add('hidden');
+      document.getElementById('view-new-thread').classList.add('hidden');
+      document.getElementById('view-thread').classList.add('hidden');
+      document.getElementById('nav-home').classList.remove('active');
+      document.getElementById('nav-new').classList.remove('active');
+
+      currentView = view;
+
+      if (view === 'home') {
+        document.getElementById('view-home').classList.remove('hidden');
+        document.getElementById('nav-home').classList.add('active');
+        renderCategories();
+        renderThreadList();
+      } else if (view === 'new-thread') {
+        document.getElementById('view-new-thread').classList.remove('hidden');
+        document.getElementById('nav-new').classList.add('active');
+        populateCategorySelect();
+      } else if (view === 'thread') {
+        currentThreadId = data;
+        document.getElementById('view-thread').classList.remove('hidden');
+        renderThreadView();
+      }
+    }
+
+    // ── Categories ──
+    function renderCategories() {
+      var threads = loadThreads();
+      var list = document.getElementById('category-list');
+      var html = '<li class="cat-item' + (currentCategory === null ? ' active' : '') + '" data-category="">All <span class="cat-count">' + threads.length + '</span></li>';
+      CATEGORIES.forEach(function(cat) {
+        var count = threads.filter(function(t) { return t.category === cat; }).length;
+        html += '<li class="cat-item' + (currentCategory === cat ? ' active' : '') + '" data-category="' + escapeHtml(cat) + '">' + escapeHtml(cat) + ' <span class="cat-count">' + count + '</span></li>';
+      });
+      list.innerHTML = html;
+    }
+
+    function selectCategory(cat) {
+      currentCategory = cat;
+      renderCategories();
+      renderThreadList();
+    }
+
+    function populateCategorySelect() {
+      var sel = document.getElementById('nt-category');
+      sel.innerHTML = '';
+      CATEGORIES.forEach(function(cat) {
+        var opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        sel.appendChild(opt);
+      });
+    }
+
+    // ── Thread List ──
+    function countAllReplies(replies) {
+      var count = 0;
+      replies.forEach(function(r) {
+        count += 1 + countAllReplies(r.replies || []);
+      });
+      return count;
+    }
+
+    function renderThreadList() {
+      var threads = loadThreads();
+      var title = currentCategory ? currentCategory : 'All Discussions';
+      document.getElementById('thread-list-title').textContent = title;
+
+      var filtered = currentCategory ? threads.filter(function(t) { return t.category === currentCategory; }) : threads;
+      filtered.sort(function(a, b) { return b.createdAt - a.createdAt; });
+
+      var container = document.getElementById('thread-list');
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty-state"><p>No threads yet in this category.</p><button class="btn btn-primary" onclick="navigateTo(\'new-thread\')">Start the first discussion</button></div>';
+        return;
+      }
+
+      var html = '';
+      filtered.forEach(function(t) {
+        var replyCount = countAllReplies(t.replies || []);
+        html += '<div class="thread-card" data-thread-id="' + escapeHtml(t.id) + '">'
+          + '<div class="thread-title">' + escapeHtml(t.title) + '</div>'
+          + '<div class="thread-meta">'
+            + '<span>by <strong>' + escapeHtml(t.author) + '</strong></span>'
+            + '<span>' + escapeHtml(t.category) + '</span>'
+            + '<span>' + timeAgo(t.createdAt) + '</span>'
+            + '<span>' + replyCount + ' repl' + (replyCount === 1 ? 'y' : 'ies') + '</span>'
+            + '<span class="resonance-badge">⚡ ' + (t.resonance || 0) + '</span>'
+          + '</div>'
+          + '<div class="thread-preview">' + escapeHtml(t.body.substring(0, 120)) + '</div>'
+          + '</div>';
+      });
+      container.innerHTML = html;
+    }
+
+    // ── Create Thread ──
+    function handleCreateThread(e) {
+      e.preventDefault();
+      var author = document.getElementById('nt-author').value.trim();
+      var category = document.getElementById('nt-category').value;
+      var title = document.getElementById('nt-title').value.trim();
+      var body = document.getElementById('nt-body').value.trim();
+      if (!author || !title || !body) return;
+
+      var threads = loadThreads();
+      var thread = {
+        id: generateId(),
+        category: category,
+        title: title,
+        body: body,
+        author: author,
+        createdAt: Date.now(),
+        resonance: computeResonance(body),
+        replies: []
+      };
+      threads.push(thread);
+      saveThreads(threads);
+
+      document.getElementById('new-thread-form').reset();
+      navigateTo('thread', thread.id);
+    }
+
+    // ── Thread View ──
+    function renderThreadView() {
+      var threads = loadThreads();
+      var thread = threads.find(function(t) { return t.id === currentThreadId; });
+      if (!thread) { navigateTo('home'); return; }
+
+      document.getElementById('tv-title').textContent = thread.title;
+      document.getElementById('tv-meta').innerHTML =
+        'Posted by <strong>' + escapeHtml(thread.author) + '</strong> in ' + escapeHtml(thread.category) + ' · ' + timeAgo(thread.createdAt) + ' · <span class="resonance-badge">⚡ Resonance: ' + (thread.resonance || 0) + '</span>';
+      document.getElementById('tv-body').textContent = thread.body;
+
+      var replyCount = countAllReplies(thread.replies || []);
+      document.getElementById('replies-heading').textContent = 'Replies (' + replyCount + ')';
+      document.getElementById('replies-container').innerHTML = renderReplies(thread.replies || [], 0);
+    }
+
+    function renderReplies(replies, depth) {
+      if (!replies || replies.length === 0) return '';
+      var html = '';
+      replies.forEach(function(r) {
+        html += '<div class="reply-node">'
+          + '<div class="reply-author">' + escapeHtml(r.author) + '</div>'
+          + '<div class="reply-text">' + escapeHtml(r.text) + '</div>'
+          + '<div class="reply-meta">'
+            + '<span>' + timeAgo(r.createdAt) + '</span>'
+            + '<span class="resonance-badge">⚡ ' + (r.resonance || 0) + '</span>'
+            + (depth < MAX_REPLY_DEPTH ? '<button class="reply-btn-small" data-toggle-reply="' + escapeHtml(r.id) + '">Reply</button>' : '')
+          + '</div>'
+          + '<div id="inline-reply-' + escapeHtml(r.id) + '" class="hidden" style="margin-top:0.5rem;">'
+            + '<input class="form-input" id="ir-author-' + escapeHtml(r.id) + '" placeholder="Your name" maxlength="60" style="margin-bottom:0.4rem;" />'
+            + '<textarea class="form-textarea" id="ir-body-' + escapeHtml(r.id) + '" placeholder="Write a reply…" maxlength="5000" style="min-height:60px;margin-bottom:0.4rem;"></textarea>'
+            + '<button class="btn btn-primary" style="font-size:0.8rem;padding:0.35rem 0.8rem;" data-nested-reply="' + escapeHtml(r.id) + '">Reply</button>'
+          + '</div>';
+        if (r.replies && r.replies.length > 0) {
+          html += '<div class="reply-children">' + renderReplies(r.replies, depth + 1) + '</div>';
+        }
+        html += '</div>';
+      });
+      return html;
+    }
+
+    function toggleInlineReply(replyId) {
+      var el = document.getElementById('inline-reply-' + replyId);
+      if (el) el.classList.toggle('hidden');
+    }
+
+    // ── Post Reply (root-level) ──
+    function handlePostReply(parentId) {
+      var authorEl = document.getElementById('reply-author');
+      var bodyEl = document.getElementById('reply-body');
+      var author = authorEl.value.trim();
+      var text = bodyEl.value.trim();
+      if (!author || !text) return;
+
+      var threads = loadThreads();
+      var thread = threads.find(function(t) { return t.id === currentThreadId; });
+      if (!thread) return;
+
+      var reply = {
+        id: generateId(),
+        author: author,
+        text: text,
+        createdAt: Date.now(),
+        parentId: parentId,
+        resonance: computeResonance(text),
+        replies: []
+      };
+
+      thread.replies.push(reply);
+      saveThreads(threads);
+
+      authorEl.value = '';
+      bodyEl.value = '';
+      renderThreadView();
+    }
+
+    // ── Post Nested Reply ──
+    function handleNestedReply(parentReplyId) {
+      var authorEl = document.getElementById('ir-author-' + parentReplyId);
+      var bodyEl = document.getElementById('ir-body-' + parentReplyId);
+      if (!authorEl || !bodyEl) return;
+      var author = authorEl.value.trim();
+      var text = bodyEl.value.trim();
+      if (!author || !text) return;
+
+      var threads = loadThreads();
+      var thread = threads.find(function(t) { return t.id === currentThreadId; });
+      if (!thread) return;
+
+      var reply = {
+        id: generateId(),
+        author: author,
+        text: text,
+        createdAt: Date.now(),
+        parentId: parentReplyId,
+        resonance: computeResonance(text),
+        replies: []
+      };
+
+      function insertReply(replies) {
+        for (var i = 0; i < replies.length; i++) {
+          if (replies[i].id === parentReplyId) {
+            if (!replies[i].replies) replies[i].replies = [];
+            replies[i].replies.push(reply);
+            return true;
+          }
+          if (replies[i].replies && insertReply(replies[i].replies)) return true;
+        }
+        return false;
+      }
+
+      insertReply(thread.replies);
+      saveThreads(threads);
+      renderThreadView();
+    }
+
+    // ── Event Delegation ──
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+
+      // Category click
+      var catItem = target.closest('[data-category]');
+      if (catItem) {
+        var cat = catItem.getAttribute('data-category');
+        selectCategory(cat === '' ? null : cat);
+        return;
+      }
+
+      // Thread card click
+      var threadCard = target.closest('[data-thread-id]');
+      if (threadCard) {
+        navigateTo('thread', threadCard.getAttribute('data-thread-id'));
+        return;
+      }
+
+      // Toggle inline reply form
+      var toggleBtn = target.closest('[data-toggle-reply]');
+      if (toggleBtn) {
+        e.stopPropagation();
+        toggleInlineReply(toggleBtn.getAttribute('data-toggle-reply'));
+        return;
+      }
+
+      // Nested reply submit
+      var nestedBtn = target.closest('[data-nested-reply]');
+      if (nestedBtn) {
+        handleNestedReply(nestedBtn.getAttribute('data-nested-reply'));
+        return;
+      }
+    });
+
+    // ── Init ──
+    seedIfEmpty();
+    navigateTo('home');
+  </script>
 </body>
 </html>
